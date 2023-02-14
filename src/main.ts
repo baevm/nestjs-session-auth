@@ -1,10 +1,10 @@
+import { ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
-import { AppModule } from './app.module'
 import * as createRedisStore from 'connect-redis'
 import * as session from 'express-session'
 import IoRedis from 'ioredis'
-import { ValidationPipe } from '@nestjs/common'
 import * as passport from 'passport'
+import { AppModule } from './app.module'
 
 const frontendUrl = 'http://localhost:3000'
 
@@ -18,14 +18,15 @@ async function bootstrap() {
     session({
       store: new RedisStore({ client: redisClient }),
       secret: 'TEST-SECRET-KEY',
+      name: 'sid',
       resave: false,
       saveUninitialized: false,
-      name: 'sid',
+      rolling: false,
 
       cookie: {
         sameSite: true,
         httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24, // 1 day
+        maxAge: 1000 * 60, // 1 day
       },
     })
   )
